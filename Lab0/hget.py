@@ -271,7 +271,6 @@ def dns_resolve(hostname: str) -> str:
     """
     if hostname == 'localhost':
         return '127.0.0.1'
-    
     # Pasos sugeridos (RFC 1035, consulta tipo A):
     # 1. Generar un query_id aleatorio (p. ej. random.randint) para asociar respuesta con consulta.
     query_id = random.randint(0, 65535)
