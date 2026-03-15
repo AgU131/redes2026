@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import random
 import socket
+from sqlite3 import connect
 import sys
 import struct
 from typing import Protocol
@@ -287,7 +288,7 @@ def dns_resolve(hostname: str) -> str:
     # 4. Cerrar el socket y devolver _dns_parse_response(data, query_id) que extrae la IP del primer registro A.
     s.close()
     res = _dns_parse_response(data, query_id)
-    
+    return res
     # raise NotImplementedError("Implementar cliente DNS (UDP, Quad9 9.9.9.9, RFC 1035).")
 
 
@@ -316,8 +317,18 @@ def connect_to_server(server_name: str, port: int = HTTP_PORT) -> socket.socket:
     # COMPLETAR: implementar resolucion usando dns_resolve(server_name)
     # PROHIBIDO usar socket.gethostbyname()
     # Paso 1: resolver el nombre con dns_resolve(server_name) y guardar la IP en una variable.
+    ip = dns_resolve(server_name)
+
     # Paso 2: imprimir en stderr "Hostname: ..." e "IP resuelta: ..." (el enunciado lo exige).
+    print(f"Hostname: {server_name}", file=sys.stderr)
+    print(f"IP resuelta: {ip}", file=sys.stderr)
+
     # Paso 3: crear socket TCP (AF_INET, SOCK_STREAM), opcional settimeout, connect((ip_address, port)), devolver el socket.
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(5)
+    s.connect((ip, port))
+    return s
+
     ...
     # NO MODIFICAR POR FUERA DE ESTA FUNCION
 
