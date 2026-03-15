@@ -272,8 +272,11 @@ def dns_resolve(hostname: str) -> str:
         return '127.0.0.1'
     # Pasos sugeridos (RFC 1035, consulta tipo A):
     # 1. Generar un query_id aleatorio (p. ej. random.randint) para asociar respuesta con consulta.
+    query_id = random.randint(0, 65535)
     # 2. Construir el mensaje de consulta con _dns_build_query(hostname, query_id).
+    query = _dns_build_query(hostname, query_id)
     # 3. Crear socket UDP (AF_INET, SOCK_DGRAM), settimeout razonable, sendto(query, (DNS_SERVER, DNS_PORT)), recvfrom(512).
+    create_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # 4. Cerrar el socket y devolver _dns_parse_response(data, query_id) que extrae la IP del primer registro A.
     raise NotImplementedError("Implementar cliente DNS (UDP, Quad9 9.9.9.9, RFC 1035).")
 
